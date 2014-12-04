@@ -36,8 +36,8 @@ window.Digger = function(rootSelector, options){
         return navHistory.length;
     }
     
-    function goUp (){
-
+    function goUp (level){
+        level = level !== null ? level : 0;
         var previous = navHistory.pop();
         if(previous === undefined) {return;}
         previous = previous.element;
@@ -51,6 +51,9 @@ window.Digger = function(rootSelector, options){
             $(diggerMainPanel).addClass('digger-level-root');            
         }
 
+        if(level - 1 > 0){
+            goUp(level);
+        }
     }
 
     function goDown (targetEl){        
@@ -65,7 +68,7 @@ window.Digger = function(rootSelector, options){
             }
         }else{
             // If the targetEl argument was a string we assume it is a CSS selector. 
-            targetEl = document.querySelectorAll(targetEl)[0];
+            targetEl = $(targetEl)[0];
         }
         
         // Check if the targetEl is a list.
@@ -282,7 +285,6 @@ window.Digger = function(rootSelector, options){
         'goDown': goDown,
         'drillDown': drillDown,
         'getCurrentLevel': getCurrentLevel
-        
     };
 
 };
