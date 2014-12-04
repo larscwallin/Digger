@@ -32,6 +32,10 @@ window.Digger = function(rootSelector, options){
 
     }
 
+    function getCurrentLevel(){
+        return navHistory.length;
+    }
+    
     function goUp (){
 
         var previous = navHistory.pop();
@@ -42,6 +46,10 @@ window.Digger = function(rootSelector, options){
             previous.removeAttribute('data-active');
             currentLevel = previous.parentElement;                                
         });
+        
+        if(getCurrentLevel() < 1){
+            $(diggerMainPanel).addClass('digger-level-root');            
+        }
 
     }
 
@@ -89,7 +97,12 @@ window.Digger = function(rootSelector, options){
         }else{
             
         }
-
+        
+        // If we are not at the top / root of the list we remove the meta class '.digger-level-root'
+        if(getCurrentLevel() > 0){            
+            $(diggerMainPanel).removeClass('digger-level-root');
+        }
+        
     }
     
     function drillDown(targetSelector) {
@@ -190,10 +203,10 @@ window.Digger = function(rootSelector, options){
         var listItemIndex = 0;
         
         diggerMainPanel = document.createElement('div');
-        $(diggerMainPanel).addClass('digger-panel-main'); 
+        $(diggerMainPanel).addClass('digger-panel-main digger-level-root');        
 
         diggerMainPanelBackLink = document.createElement('div');
-        $(diggerMainPanelBackLink).addClass('digger-link-up'); 
+        $(diggerMainPanelBackLink).addClass('digger-link-up');         
 
         $(sourceListElement).wrap(diggerMainPanel);
         $(diggerMainPanelBackLink).prependTo('.digger-panel-main');
@@ -206,8 +219,10 @@ window.Digger = function(rootSelector, options){
         // Set up unique ids for each list-item
         $(sourceListElement).find(listItemTagName).each(function(){
             $(this).attr('data-digger-id', ('item-' + listItemIndex++));
-        });
-                
+        });        
+        
+        diggerMainPanel = $(sourceListElement).parent();
+        
         cb();
     }
 
@@ -265,7 +280,8 @@ window.Digger = function(rootSelector, options){
     return {
         'goUp': goUp,
         'goDown': goDown,
-        'drillDown': drillDown
+        'drillDown': drillDown,
+        'getCurrentLevel': getCurrentLevel
         
     };
 
