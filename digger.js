@@ -161,7 +161,8 @@ window.Digger = function(rootSelector, options){
     
     function setupClassNames(cb){
         $(sourceListElement).parent().find(listRootTagName).addClass('digger-box digger-list');
-        $(sourceListElement).addClass('digger-list-root');
+        $(sourceListElement).find(listItemTagName).addClass('digger-list-item');
+        $(sourceListElement).addClass('digger-list-root');          
         $(listRootTagName + ('.digger-box * ' + listRootTagName)).css('display', 'none');
 
         cb();
@@ -172,8 +173,7 @@ window.Digger = function(rootSelector, options){
         $(sourceListElement).find(listItemTagName).each(function(itemIndex){
             var link;
             if($(this).find(listRootTagName).length > 0){
-                this.setAttribute('style', 'position:relative;');
-                $(this).addClass('digger-list-item');                
+                this.setAttribute('style', 'position:relative;');                              
                 link = document.createElement('a');
                 link.setAttribute('class', 'digger-link-down');
                 this.appendChild(link);
