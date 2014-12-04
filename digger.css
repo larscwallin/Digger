@@ -1,0 +1,41 @@
+.digger-link-down {
+    width: 20px;
+    height: 20px;
+    background-color: #ccc;
+    display: block;
+    position: absolute;
+    right:  20px;
+    top: 0px;
+    text-align: center;
+}
+
+.digger-link-down:after {
+    content: '»';
+}
+
+.digger-link-up {
+    width: 20px;
+    height: 20px;
+    background-color: #ccc;
+    display: block;
+    position: relative;
+    left:  0px;
+    top: 0px;
+    text-align: center;
+}
+
+.digger-link-up:after {
+    content: '«';
+}
+
+.digger-box {
+
+}
+
+.digger-list {
+
+}
+
+.digger-list-item {
+    margin: 5px;
+}
