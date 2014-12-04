@@ -4,6 +4,8 @@ Digger
 Simple JQuery based component which turns any hierarchical element structure (UL by default) to a traversable menu. 
 Perfect for Responsive side menus etc. where you want to be able to navigate down, or up to a specific level before actually loading the page.
 
+Slightly sketchy code at the moment ;)
+
 API:
 
 * Digger.goDown( element / css-selector )
