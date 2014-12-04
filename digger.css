@@ -1,7 +1,6 @@
 .digger-link-down {
     width: 20px;
     height: 20px;
-    background-color: #ccc;
     display: block;
     position: absolute;
     right:  20px;
@@ -16,7 +15,6 @@
 .digger-link-up {
     width: 20px;
     height: 20px;
-    background-color: #ccc;
     display: block;
     position: relative;
     left:  0px;
@@ -38,4 +36,8 @@
 
 .digger-list-item {
     margin: 5px;
+}
+
+.digger-level-root .digger-link-up {
+    opacity: 0.2;
 }
