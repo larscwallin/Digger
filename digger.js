@@ -3,15 +3,14 @@ window.Digger = function(rootSelector, options){
     var navHistory = [];
     var currentLevel = null;
     var transitionHandler = null;
-    var diggerMainPanel = null;
-    var diggerMainPanelBackLink = null;
     var listRootTagName = 'ul';
     var listItemTagName = 'li';
+    var diggerWidgetPanel = null;
 
     function transitionIn(from, to, cb){                
 
             $(from).css('display', 'none');                    
-            $(to).appendTo('.digger-panel-main');
+            $(to).appendTo('.digger-panel-content');
             $(to).css('display', 'inherit');            
 
             if(cb instanceof Function){
@@ -48,7 +47,7 @@ window.Digger = function(rootSelector, options){
         });
         
         if(getCurrentLevel() < 1){
-            $(diggerMainPanel).addClass('digger-level-root');            
+            $(diggerWidgetPanel).addClass('digger-level-root');
         }
 
         if(level - 1 > 0){
@@ -103,7 +102,7 @@ window.Digger = function(rootSelector, options){
         
         // If we are not at the top / root of the list we remove the meta class '.digger-level-root'
         if(getCurrentLevel() > 0){            
-            $(diggerMainPanel).removeClass('digger-level-root');
+            $(diggerWidgetPanel).removeClass('digger-level-root');
         }
         
     }
@@ -190,7 +189,7 @@ window.Digger = function(rootSelector, options){
             var link;
             if($(this).find(listRootTagName).length > 0){
                 this.setAttribute('style', 'position:relative;');                              
-                link = document.createElement('a');
+                link = window.document.createElement('a');
                 link.setAttribute('class', 'digger-link-down');
                 this.appendChild(link);
             }else{
@@ -200,45 +199,69 @@ window.Digger = function(rootSelector, options){
         cb();
     }
 
-
-
     function setupElements(cb){
         var listItemIndex = 0;
-        
-        diggerMainPanel = document.createElement('div');
-        $(diggerMainPanel).addClass('digger-panel-main digger-level-root');        
+        var diggerBackLink = null;
+        var diggerHeader = null;
+        var diggerFooter = null;
+        var diggerContent = null;
+        var diggerHeaderTitle = null;
 
-        diggerMainPanelBackLink = document.createElement('div');
-        $(diggerMainPanelBackLink).addClass('digger-link-up');         
+        // Create the Digger header back link and add it to the header.
+        diggerHeader = window.document.createElement('div');
+        $(diggerHeader).addClass('digger-panel-header');
 
-        $(sourceListElement).wrap(diggerMainPanel);
-        $(diggerMainPanelBackLink).prependTo('.digger-panel-main');
+        // Create the Digger header back link and add it to the header.
+        diggerBackLink = window.document.createElement('div');
+        $(diggerBackLink).addClass('digger-link-up');
+        $(diggerBackLink).prependTo(diggerHeader);
+
+        // Create the Digger header title and add it to its parent.
+        diggerHeaderTitle = window.document.createElement('div');
+        $(diggerHeaderTitle).addClass('digger-panel-header-title');
+        $(diggerHeaderTitle).appendTo(diggerHeader);
+
+        // Create the Digger content element and add it to the Widget panel.
+        diggerFooter = window.document.createElement('div');
+        $(diggerFooter).addClass('digger-panel-footer');
+
+        $(sourceListElement).wrap('<div class="digger-panel-content"></div>');
+
+        $('.digger-panel-content').wrap('<div class="digger-panel-widget digger-level-root"></div>');
+
+
+        // Add the header to the main Widget panel
+        $(diggerHeader).prependTo('.digger-panel-widget');
+
+        $(diggerFooter).appendTo('.digger-panel-widget');
 
         // Set up unique ids for each list
+
         $(sourceListElement).find(listRootTagName).each(function(){
             $(this).attr('data-digger-id', ('list-' + listItemIndex++));
         });
 
         // Set up unique ids for each list-item
+
         $(sourceListElement).find(listItemTagName).each(function(){
             $(this).attr('data-digger-id', ('item-' + listItemIndex++));
         });        
         
-        diggerMainPanel = $(sourceListElement).parent();
+        diggerWidgetPanel = $('.digger-panel-widget');
         
         cb();
     }
 
     function attachElementHanders(cb){
         $(sourceListElement).find('.digger-link-down').on('click', goDown);
-        $('.digger-panel-main').find('.digger-link-up').on('click', goUp);
+        $('.digger-panel-widget').find('.digger-link-up').on('click', goUp);
 
         cb();
     }
 
     function removeElementHanders(cb){
         $(sourceListElement).find('.digger-link-down').up('click', this.goDown);
-        $('.digger-panel-main').find('.digger-link-up').off('click', goUp);
+        $('.digger-panel-widget').find('.digger-link-up').off('click', goUp);
         cb();
     }
 
@@ -260,7 +283,7 @@ window.Digger = function(rootSelector, options){
 
     function init(){
 
-        sourceListElement = document.querySelector(rootSelector);
+        sourceListElement = window.$(rootSelector)[0];
         if(options !== undefined){
             listRootTagName = options.listRootTagName !== null ? options.listRootTagName : 'ul';                
             listItemTagName = options.listItemTagName !== null ? options.listItemTagName : 'li';                                
