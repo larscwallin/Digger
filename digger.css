@@ -3,7 +3,16 @@
     height: 44px;
     background-color: rgba(255,255,255,0.8)!important;
     display: block;
+    overflow: hidden;
 
+}
+
+.digger-panel-header-title {
+    float: left;
+    height: 40px;
+    vertical-align: middle;
+    margin-top: 17px;
+    overflow: hidden;
 }
 
 .digger-link-down {
@@ -27,15 +36,15 @@
 
 .digger-link-up {
     position: relative;
-    left:  0px;
-    top: 0px;
-    margin-bottom: 20px;
+    width: 20px;
+    height: 20px;
     font-size: 1.5em;
     padding: 10px;
     color: inherit;
     border-radius: 0%;
     text-align: left;
     cursor: pointer;
+    float: left;
 }
 
 .digger-link-up:after {

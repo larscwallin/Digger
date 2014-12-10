@@ -6,6 +6,9 @@ window.Digger = function(rootSelector, options){
     var listRootTagName = 'ul';
     var listItemTagName = 'li';
     var diggerWidgetPanel = null;
+    var $ = window.$;
+    var jQuery = window.jQuery;
+    var context = window;
 
     function transitionIn(from, to, cb){                
 
@@ -37,21 +40,27 @@ window.Digger = function(rootSelector, options){
     
     function goUp (level){
         level = level !== null ? level : 0;
-        var previous = navHistory.pop();
-        if(previous === undefined) {return;}
-        previous = previous.element;
 
-        transitionOut(currentLevel, previous, function(){
-            previous.removeAttribute('data-active');
-            currentLevel = previous.parentElement;                                
+        var previous = navHistory.pop();
+
+        if(previous === undefined) {return;}
+
+        transitionOut(currentLevel, previous.element, function(){
+            previous.element.removeAttribute('data-active');
+            currentLevel = previous.element.parentElement;
+
         });
         
         if(getCurrentLevel() < 1){
             $(diggerWidgetPanel).addClass('digger-level-root');
+            $('.digger-panel-header-title').text('');
+        }else{
+            $('.digger-panel-header-title').text(previous.title);
         }
 
         if(level - 1 > 0){
             goUp(level);
+
         }
     }
 
@@ -60,7 +69,7 @@ window.Digger = function(rootSelector, options){
         var parentText;
 
         if(typeof targetEl !== 'string'){
-            if(targetEl instanceof jQuery.Event || targetEl instanceof window.Event){
+            if(targetEl instanceof jQuery.Event || targetEl instanceof context.Event){
                 targetEl = targetEl.currentTarget.parentElement;
             } else {
 
@@ -86,6 +95,8 @@ window.Digger = function(rootSelector, options){
                 targetEl.setAttribute('data-active', 'true');
 
                 parentText = targetEl.innerText;
+
+                $('.digger-panel-header-title').text(parentText);
 
                 navHistory.push({'title':parentText, 'element':targetEl});
 
@@ -185,11 +196,11 @@ window.Digger = function(rootSelector, options){
 
     function setupNavigationLinks(cb){
         
-        $(sourceListElement).find(listItemTagName).each(function(itemIndex){
+        $(sourceListElement).find(listItemTagName).each(function(){
             var link;
             if($(this).find(listRootTagName).length > 0){
                 this.setAttribute('style', 'position:relative;');                              
-                link = window.document.createElement('a');
+                link = context.document.createElement('a');
                 link.setAttribute('class', 'digger-link-down');
                 this.appendChild(link);
             }else{
@@ -204,25 +215,24 @@ window.Digger = function(rootSelector, options){
         var diggerBackLink = null;
         var diggerHeader = null;
         var diggerFooter = null;
-        var diggerContent = null;
         var diggerHeaderTitle = null;
 
         // Create the Digger header back link and add it to the header.
-        diggerHeader = window.document.createElement('div');
+        diggerHeader = context.document.createElement('div');
         $(diggerHeader).addClass('digger-panel-header');
 
         // Create the Digger header back link and add it to the header.
-        diggerBackLink = window.document.createElement('div');
+        diggerBackLink = context.document.createElement('div');
         $(diggerBackLink).addClass('digger-link-up');
         $(diggerBackLink).prependTo(diggerHeader);
 
         // Create the Digger header title and add it to its parent.
-        diggerHeaderTitle = window.document.createElement('div');
+        diggerHeaderTitle = context.document.createElement('div');
         $(diggerHeaderTitle).addClass('digger-panel-header-title');
         $(diggerHeaderTitle).appendTo(diggerHeader);
 
         // Create the Digger content element and add it to the Widget panel.
-        diggerFooter = window.document.createElement('div');
+        diggerFooter = context.document.createElement('div');
         $(diggerFooter).addClass('digger-panel-footer');
 
         $(sourceListElement).wrap('<div class="digger-panel-content"></div>');
@@ -283,7 +293,7 @@ window.Digger = function(rootSelector, options){
 
     function init(){
 
-        sourceListElement = window.$(rootSelector)[0];
+        sourceListElement = $(rootSelector)[0];
         if(options !== undefined){
             listRootTagName = options.listRootTagName !== null ? options.listRootTagName : 'ul';                
             listItemTagName = options.listItemTagName !== null ? options.listItemTagName : 'li';                                
