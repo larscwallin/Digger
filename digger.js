@@ -40,6 +40,8 @@ window.Digger = function(rootSelector, options){
     
     function goUp (level){
         level = level !== null ? level : 0;
+        var current;
+        var nextParentLevel;
 
         var previous = navHistory.pop();
 
@@ -51,11 +53,14 @@ window.Digger = function(rootSelector, options){
 
         });
         
-        if(getCurrentLevel() < 1){
+        current = getCurrentLevel();
+
+        if(current < 1){
             $(diggerWidgetPanel).addClass('digger-level-root');
             $('.digger-panel-header-title').text('');
         }else{
-            $('.digger-panel-header-title').text(previous.title);
+            nextParentLevel = navHistory[current - 1];
+            $('.digger-panel-header-title').text(nextParentLevel.title);
         }
 
         if(level - 1 > 0){
